@@ -14,3 +14,7 @@ function add_input() {
     $("#number-fields").append(input);
     $(".number-fields-input").last().focus();
 }
+
+function check_input() {
+
+}
