@@ -45,11 +45,11 @@ function add_input() {
     // If this is the first one added
     if (count == -1) {
         // Add an input with the number before the decimal points and a dot
-        input = $('<input value="' + constant[0]["start"] + "." + '" style="display: inline;" id="number-fields-input-num-' + count + '" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="2">')
+        input = $('<input value="' + constant[0]["start"] + "." + '" style="background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-' + count + '" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="2">')
         $("#number-fields").append(input);
     } else {
         // Add an empty input field
-        input = $('<input style="display: inline;" id="number-fields-input-num-' + count + '" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
+        input = $('<input id="number-fields-input-num-' + count + '" style="background-color: #2F363F;" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
         $("#number-fields").append(input);
     }
     // If a digit has been entered manually in the last field
@@ -68,12 +68,14 @@ function check_input(index) {
     typed_digit = input.val();
     if (correct_digit == typed_digit) {
         console.log("Correct! You entered: " + typed_digit + ", the correct digit at that position is: " + correct_digit + "; index: " + (index-1).toString());
-        input.css("background-color", "green");
+        input.css("color", "#43BE31");
+        input.css("border-color", "#43BE31");
         correct_count += 1;
         $("#correct-recall-indicator").text("You recalled " + correct_count + " digits correcty.")
     } else {
         console.log("Incorrect! You entered: " + typed_digit + ", the correct digit at that position is: " + correct_digit + "; index: " + (index-1).toString());
-        input.css("background-color", "red");
+        input.css("color", "#D63031");
+        input.css("border-color", "#D63031");
     }
 }
 

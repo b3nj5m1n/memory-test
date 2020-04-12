@@ -7,12 +7,6 @@
     user-select: none;
 }
 
-@media (min-width: 768px) {
-    .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-    }
-}
-
 .number-fields input {
     width: 1cm;
     text-align: center;
@@ -23,5 +17,19 @@
 }
 
 body {
+    background-color: #2F363F;
+}
+
+h1 {
+    color: white;
+}
+
+h2 {
+    color: honeydew;
+}
+
+.form-control {
+    color: lightcyan;
+    display: inline;
     background-color: #2F363F;
 }
