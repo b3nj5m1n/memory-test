@@ -29,6 +29,8 @@
     <script src="jquery-3.5.0.min.js"></script>
     <script src="index.js"></script>
     <script src="constants/e.js"></script>
+    <script src="constants/pi.js"></script>
+    <script src="constants/phi.js"></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -40,16 +42,16 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">π</a>
+                        <a class="nav-link" onclick='switch_constant("π", this);'>π</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">φ</a>
+                        <a class="nav-link" onclick='switch_constant("φ", this);'>φ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">e</a>
+                        <a class="nav-link" onclick='switch_constant("e", this);'>e</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Custom</a>
+                        <a class="nav-link" onclick="">Custom</a>
                     </li>
                 </ul>
             </div>
@@ -62,13 +64,14 @@
             <h1 class="mt-5">Recall as many digits of
                 <p class="recall-target mt-5" style="display: inline;"></p>
                 as possible.</h1>
+            <h2 id="correct-recall-indicator"></h2>
             <!-- Input fields for the numbers -->
             <div class="container number-fields" id="number-fields">
                 <!-- This will contain the input fields -->
             </div>
-            <div class="progress">
+            <!-- <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+            </div> -->
         </div>
     </main>
 
