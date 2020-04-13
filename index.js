@@ -7,6 +7,8 @@ var constant = "";
 var correct_count = 0;
 // Variable to store how many digits to group together
 var group_count_user = 3;
+// Variable to store how many digits will be recalled in total
+var digit_count_total = 25;
 
 // Called when the document has finished loading
 $(document).ready(function () {
@@ -25,10 +27,6 @@ function clear_inputs() {
 
 // Function to setup all of the elements, except for the intput fields
 function setup_ui() {
-    // Get value of how many input fields need to be adeed
-    num_of_digits = $("#recall-digits-count").val();
-    // Get the value for how many digits to group together
-    group_count_user = $("#input-group-count").val()
     // Hide the progress bar
     $("#progress-bar-digits-recalled-container").addClass("hidden");
     // Unhide the config
@@ -49,6 +47,11 @@ function setup_ui() {
 // Function called when a new recall session is started
 function setup() {
     setup_ui();
+    // Get value of how many input fields need to be adeed
+    num_of_digits = $("#recall-digits-count").val();
+    digit_count_total = num_of_digits;
+    // Get the value for how many digits to group together
+    group_count_user = $("#input-group-count").val()
     // Hide config
     $("#user-config").addClass("hidden");
     // Show progress bar
@@ -254,7 +257,7 @@ function check_input(index) {
         // Add one to the variable keeping track of how many digits were correct
         correct_count += 1;
         // Update the text displaying how many digits were recalled correctly
-        $("#correct-recall-indicator").text("You recalled " + correct_count + " digits correcty.")
+        $("#correct-recall-indicator").text("You recalled " + correct_count + " / " + digit_count_total + " digits correcty. (" + ((correct_count/digit_count_total)*100).toString() + "%)")
     } else {
         // console.log("Incorrect! You entered: " + typed_digit + ", the correct digit at that position is: " + correct_digit + "; index: " + (index - 1).toString());
         // Set the input's color to red
