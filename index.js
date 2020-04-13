@@ -5,22 +5,34 @@ var use = "π";
 var constant = "";
 // Variable for correctly recalled numbers
 var correct_count = 0;
+// Variable to store how many digits to group together
+var group_count_user = 3;
 
 // Called when the document has finished loading
 $(document).ready(function () {
     // setup();
 });
 
+// Function to remove all inputs on the screen
+function clear_inputs() {
+    $('.input_group').each(function (i, obj) {
+        $(this).remove();
+    });
+    $('.number-fields-input').each(function (i, obj) {
+        $(this).remove();
+    });
+}
+
 // Function called when a new recall session is started
 function setup() {
     // Get value of how many input fields need to be adeed
     num_of_digits = $("#recall-digits-count").val();
+    // Get the value for how many digits to group together
+    group_count_user = $("#input-group-count").val()
     // Hide button for start
     $("#setup-btn").addClass("hidden");
     // Remove all the inputs
-    $('.number-fields-input').each(function (i, obj) {
-        $(this).remove();
-    });
+    clear_inputs();
     // Put the symbol of the constant to use in the text under the navbar
     recall_target = use;
     $(".recall-target").text(recall_target);
@@ -35,7 +47,7 @@ function setup() {
     // Add the first digit (Not a decimal)
     add_input();
     // Add the input fields in groups
-    add_inputs_groups(num_of_digits, 0);
+    add_inputs_groups(num_of_digits, group_count_user);
     // Show submit button
     $("#submit-numbers-btn").removeClass("hidden");
     // Set correct count to 0
@@ -97,7 +109,7 @@ function add_input(parent, curr) {
     // If this input is the first input, it should contain the value before the .
     if (curr == -1) {
         // Add special input field containing that value, read only with custom colors
-        input = $('<input value="' + constant[0]["start"] + "." + '" style="display: block; background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-' + curr + '" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="2">')
+        input = $('<input value="' + constant[0]["start"] + "." + '" style="background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-start" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="2">')
         // Add the input to the number-fields div
         $("#number-fields").append(input);
     } else {

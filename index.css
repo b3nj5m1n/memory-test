@@ -38,7 +38,22 @@ h2 {
     display: none;
 }
 
+#number-fields {
+    padding-right: 5vh;
+    width: 100%;
+
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+}
+
 .input_group {
-    display: inline;
-    padding-right: 5px;
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    padding-right: 5vh;
+}
+
+#number-fields-input-num-start {
+    margin-right: 100%;
 }
