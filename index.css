@@ -33,3 +33,7 @@ h2 {
     display: inline;
     background-color: #2F363F;
 }
+
+.hidden {
+    display: none;
+}
