@@ -42,6 +42,8 @@ function setup_ui() {
     $(".recall-target").text(recall_target);
     // Hide the text saying how many numbers have been correctly recalled
     $("#correct-recall-indicator").text("")
+    // Reset the progress bar
+    $("#progress-bar-digits-recalled").css("width", "0%")
 }
 
 // Function called when a new recall session is started

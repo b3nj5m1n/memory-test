@@ -62,12 +62,12 @@
                 <p class="recall-target mt-5" style="display: inline;"></p>
                 as possible.</h1>
             <div id="set-digits-count-form">
-                <h2>How many digits are you going to recall?</h2>
                 <div id="user-config" class="input-group mb-3">
-                    <input value="Group digits into pairs of" type="button" class="form-control">
-                    <input id="input-group-count" min="0" max="25" type="number" value="3" class="form-control">
-                    <input id="recall-digits-count" min="1" max="10000" type="number" value="25" class="form-control">
-                    <input onclick="setup();" id="setup-btn" value="start" type="button" class="form-control">
+                    <input value="Group size:" type="button" class="form-control btn-warning">
+                    <input id="input-group-count" min="0" max="25" type="number" value="3" class="form-control btn-warning">
+                    <input value="Num of digits" type="button" class="form-control btn-warning">
+                    <input id="recall-digits-count" min="1" max="10000" type="number" value="25" class="form-control btn-warning"">
+                    <input onclick="setup();" id="setup-btn" value="start" type="button" class="form-control btn btn-warning"">
                 </div>
                 <div class="progress hidden" id="progress-bar-digits-recalled-container">
                     <div id="progress-bar-digits-recalled" class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 0%"
