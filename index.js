@@ -34,8 +34,8 @@ function setup() {
     }
     // Add the first digit (Not a decimal)
     add_input();
-    // Add one input for every digit to be recalled
-    while (add_input() < num_of_digits - 1) { }
+    // Add the input fields in groups
+    add_inputs_groups(num_of_digits, 0);
     // Show submit button
     $("#submit-numbers-btn").removeClass("hidden");
     // Set correct count to 0
@@ -63,28 +63,49 @@ function submit() {
     $("#setup-btn").removeClass("hidden");
 }
 
-// Function to add a new input field
-function add_input() {
-    // Variable to count the number of input fields
-    var count = -1
-    // Loop over input fields
-    $('.number-fields-input').each(function (i, obj) {
-        // Set count to i
-        count = i;
-    });
+// Function to automatically create all necessary input groups
+function add_inputs_groups(input_count, group_size) {
+    // If the input is not valid, so 0 or lower
+    if (group_size < 1) {
+        // Make the group size as big as the input count, hence creating one giant group for all inputs
+        group_size = input_count;
+    }
+    // Add the inital input field, which is not a decimal point (The parent does not matter in this case)
+    add_input(1, -1)
+    // Calculate how many groups will be needed to get the desired number of fields
+    num_of_groups = input_count / group_size;
+    // Add all necessary input groups
+    for (let current_group = 0; current_group < num_of_groups; current_group++) {
+        add_input_group(group_size, current_group);   
+    }
+}
+
+// Add an input group (A div containing multiple input fields, to be able to put spacing between pairs of 3's, 6's, and so on), group_index being the index of the current group
+function add_input_group(group_size, group_index) {
+    // Create DOM element for the group
+    input_group = $('<div class="input_group"></div>');
+    // Add as many inputs as specified
+    for (let current_field = 0; current_field < group_size; current_field++) {
+        add_input(input_group, group_index*group_size+current_field);
+    }
+    // Append the input group to the number fields div
+    $("#number-fields").append(input_group);
+}
+
+// Function to add a new input field, parent being the input group to add to and curr the current index
+function add_input(parent, curr) {
     // If this input is the first input, it should contain the value before the .
-    if (count == -1) {
+    if (curr == -1) {
         // Add special input field containing that value, read only with custom colors
-        input = $('<input value="' + constant[0]["start"] + "." + '" style="background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-' + count + '" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="2">')
+        input = $('<input value="' + constant[0]["start"] + "." + '" style="display: block; background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-' + curr + '" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="2">')
         // Add the input to the number-fields div
         $("#number-fields").append(input);
     } else {
         // Add an empty input field
-        input = $('<input id="number-fields-input-num-' + count + '" style="background-color: #2F363F;" onkeydown="on_input(this); //add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
-        $("#number-fields").append(input);
+        input = $('<input id="number-fields-input-num-' + curr + '" style="background-color: #2F363F;" onkeydown="on_input(this); //add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
+        // Append the input field to the parent (An input group)
+        $(parent).append(input);
     }
-    // Return a total count of how many input fields there currently are
-    return count;
 }
 
 // Function called when a key is pressed inside one of the input fields

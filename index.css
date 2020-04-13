@@ -37,3 +37,8 @@ h2 {
 .hidden {
     display: none;
 }
+
+.input_group {
+    display: inline;
+    padding-right: 5px;
+}
