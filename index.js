@@ -95,24 +95,26 @@ function on_input(sender) {
         // Subtract to get from numpad keys to numbers
         keyCode -= 48;
     }
+    // If backspace has been pressed
+    if (keyCode == 8) {
+        // Focus the previous input
+        focus_prev(sender);
+    }
     // Convert the number to a string
     var number = String.fromCharCode(keyCode);
     // Set the key previous on the input to the value currently in it
     $(sender).data('previous', $(sender).data("current"));
     // Set the key current on the input to the key that has been pressed
     $(sender).data('current', number);
-    // If backspace has been pressed on an empty field (We know the field was empty before because the focus would be on the next input)
-    if ($(sender).data("current") == "") {
-        // Focus the previous input
-        focus_prev(sender);
-    } else {
-        // Else focus the next input
+    // If the key pressed was not backspace
+    if (keyCode != 8) {
+        // Focus the next input
         focus_next(sender);
+        // Prevent the keydown event from producing a char (This would be put in the new input field)
+        event.preventDefault();
+        // Set the value for the input field where the value was originally entered
+        set_input(get_input_index(sender), $(sender).data("current"))
     }
-    // Prevent the keydown event from producing a char (This would be put in the new input field)
-    event.preventDefault();
-    // Set the value for the input field where the value was originally entered
-    set_input(get_input_index(sender), $(sender).data("current"))
 }
 
 // Function to focus an input field based on index
@@ -176,6 +178,8 @@ function focus_prev(sender) {
     focus_input(get_input_index(sender) - 1);
     // Set the text of the new input field to nothing
     set_input(get_input_index(sender) - 1, "");
+    // Set the text of the current input field to nothing, just in case there was something there
+    set_input(get_input_index(sender), "");
 }
 
 // Function to check if the value entered in an input field at the index passed as a parameter is correct
