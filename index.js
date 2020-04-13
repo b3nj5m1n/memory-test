@@ -261,6 +261,10 @@ function check_input(index) {
         input.css("color", "#D63031");
         // Set the input's border's color to red
         input.css("border-color", "#D63031");
+        // Create a tooltip to show the correct digit when hovering
+        input.attr("data-toggle", "tooltip")
+        input.attr("data-placement", "top")
+        input.attr("title", correct_digit)
     }
 }
 
@@ -301,6 +305,15 @@ function update_progress() {
     // Adjust the progress bar accordingly
     $("#progress-bar-digits-recalled").css("width", percent.toString() + "%")
 }
+
+// Enable tooltips
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+// Enable popovers
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
 
 // Function to save input's value on focus
 $('input').on('focusin', function () {
