@@ -32,7 +32,7 @@ function setup() {
     // // Add a second input field
     // add_input();
     // Add inputs for all of the digits
-    while (add_input() < num_of_digits-1) { }
+    while (add_input() < num_of_digits - 1) { }
 
     // Show submit button
     $("#submit-numbers-btn").removeClass("hidden");
@@ -47,7 +47,7 @@ function submit() {
     $('.number-fields-input').each(function (i, obj) {
         $(this).prop("readonly", true);
         if (count > -1) {
-            check_input(count+1);   
+            check_input(count + 1);
         }
         count += 1;
     });
@@ -69,7 +69,7 @@ function add_input() {
         $("#number-fields").append(input);
     } else {
         // Add an empty input field
-        input = $('<input id="number-fields-input-num-' + count + '" style="background-color: #2F363F;" oninput="focus_next(this); //add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
+        input = $('<input id="number-fields-input-num-' + count + '" style="background-color: #2F363F;" onkeyup="on_input(this); //add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
         $("#number-fields").append(input);
     }
     return count;
@@ -83,21 +83,53 @@ function add_input() {
     // $(".number-fields-input").last().focus();
 }
 
-function focus_next(sender) {
-    var count = -1
-    var now = false;
-    $('.number-fields-input').each(function (i, obj) {
-        // $(this).prop("readonly", true);
+function on_input(sender) {
+    $(sender).data('previous', $(sender).data("current"));
+    $(sender).data('current', $(sender).val());
+    if ($(sender).data("current") == "") {
+        focus_prev(sender);
+    } else {
+        focus_next(sender);
+    }
+}
 
-        if (now) {
+function focus_input(index_to_focus) {
+    var index = -1
+    $('.number-fields-input').each(function (i, obj) {
+        if (index == index_to_focus) {
             $(this).focus();
-            now = false;
         }
-        if ($(sender).attr('id') == $(this).attr('id')) {
-            now = true;
-        }
-        count = i;
+        index = i;
     });
+}
+function clear_input(index_to_delete) {
+    var index = -1
+    $('.number-fields-input').each(function (i, obj) {
+        if (index == index_to_delete) {
+            $(this).val("");
+        }
+        index = i;
+    });
+}
+
+function get_input_index(sender) {
+    result = -1;
+    $('.number-fields-input').each(function (i, obj) {
+        if ($(sender).attr('id') == $(this).attr('id')) {
+            result = i;
+        }
+    });
+    return result - 1;
+}
+
+function focus_next(sender) {
+    focus_input(get_input_index(sender) + 1);
+    clear_input(get_input_index(sender) + 1);
+}
+// Focus prev input and delete the value in it
+function focus_prev(sender) {
+    focus_input(get_input_index(sender) - 1);
+    clear_input(get_input_index(sender) - 1);
 }
 
 function check_input(index) {
@@ -127,3 +159,8 @@ function switch_constant(param, sender) {
     });
     $(sender).addClass("active");
 }
+
+// Function to save input's value on focus
+$('input').on('focusin', function () {
+    $(this).data('current', $(this).val());
+});
