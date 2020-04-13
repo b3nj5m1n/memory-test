@@ -59,7 +59,7 @@ function submit() {
         // Increase the count
         count += 1;
     });
-    // Hide the button allowing you to start a new session
+    // Unhide the button allowing you to start a new session
     $("#setup-btn").removeClass("hidden");
 }
 
@@ -218,6 +218,8 @@ function switch_constant(param, sender) {
     });
     // Set the active class on the element that was clicked
     $(sender).addClass("active");
+    // Unhide the button allowing you to start a new session
+    $("#setup-btn").removeClass("hidden");
 }
 
 // Function to save input's value on focus
