@@ -10,7 +10,7 @@ var group_count_user = 3;
 
 // Called when the document has finished loading
 $(document).ready(function () {
-    // setup();
+    setup_ui();
 });
 
 // Function to remove all inputs on the screen
@@ -23,19 +23,34 @@ function clear_inputs() {
     });
 }
 
-// Function called when a new recall session is started
-function setup() {
+// Function to setup all of the elements, except for the intput fields
+function setup_ui() {
     // Get value of how many input fields need to be adeed
     num_of_digits = $("#recall-digits-count").val();
     // Get the value for how many digits to group together
     group_count_user = $("#input-group-count").val()
-    // Hide button for start
-    $("#setup-btn").addClass("hidden");
+    // Hide the progress bar
+    $("#progress-bar-digits-recalled-container").addClass("hidden");
+    // Unhide the config
+    $("#user-config").removeClass("hidden");
+    // Hide submit button
+    $("#submit-numbers-btn").addClass("hidden");
     // Remove all the inputs
     clear_inputs();
     // Put the symbol of the constant to use in the text under the navbar
     recall_target = use;
     $(".recall-target").text(recall_target);
+    // Hide the text saying how many numbers have been correctly recalled
+    $("#correct-recall-indicator").text("")
+}
+
+// Function called when a new recall session is started
+function setup() {
+    setup_ui();
+    // Hide config
+    $("#user-config").addClass("hidden");
+    // Show progress bar
+    $("#progress-bar-digits-recalled-container").removeClass("hidden");
     // Get constant from json
     if (use == "π") {
         constant = JSON.parse(pi);
@@ -52,8 +67,6 @@ function setup() {
     $("#submit-numbers-btn").removeClass("hidden");
     // Set correct count to 0
     correct_count = 0;
-    // Hide the text saying how many numbers have been correctly recalled
-    $("#correct-recall-indicator").text("")
 }
 
 // Function called by the submit button
@@ -71,8 +84,10 @@ function submit() {
         // Increase the count
         count += 1;
     });
+    // Hide the progress bar
+    $("#progress-bar-digits-recalled-container").addClass("hidden");
     // Unhide the button allowing you to start a new session
-    $("#setup-btn").removeClass("hidden");
+    $("#user-config").removeClass("hidden");
 }
 
 // Function to automatically create all necessary input groups
@@ -88,7 +103,7 @@ function add_inputs_groups(input_count, group_size) {
     num_of_groups = input_count / group_size;
     // Add all necessary input groups
     for (let current_group = 0; current_group < num_of_groups; current_group++) {
-        add_input_group(group_size, current_group);   
+        add_input_group(group_size, current_group);
     }
 }
 
@@ -98,7 +113,7 @@ function add_input_group(group_size, group_index) {
     input_group = $('<div class="input_group"></div>');
     // Add as many inputs as specified
     for (let current_field = 0; current_field < group_size; current_field++) {
-        add_input(input_group, group_index*group_size+current_field);
+        add_input(input_group, group_index * group_size + current_field);
     }
     // Append the input group to the number fields div
     $("#number-fields").append(input_group);
@@ -109,7 +124,7 @@ function add_input(parent, curr) {
     // If this input is the first input, it should contain the value before the .
     if (curr == -1) {
         // Add special input field containing that value, read only with custom colors
-        input = $('<input value="' + constant[0]["start"] + "." + '" style="background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-start" oninput="add_input();" class="number-fields-input form-control" type="text" maxlength="2">')
+        input = $('<input value="' + constant[0]["start"] + "." + '" style="background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-start" oninput="add_input();" class="number-fields-input form-control" readonly="true" type="text" maxlength="2">')
         // Add the input to the number-fields div
         $("#number-fields").append(input);
     } else {
@@ -148,6 +163,8 @@ function on_input(sender) {
         // Set the value for the input field where the value was originally entered
         set_input(get_input_index(sender), $(sender).data("current"))
     }
+    // Adjust the progress bar
+    update_progress();
 }
 
 // Function to focus an input field based on index
@@ -207,12 +224,14 @@ function focus_next(sender) {
 }
 // Function to focus the previous input field relative to the one passed as a parameter & delete the value in that previous input field
 function focus_prev(sender) {
-    // Focus the input at the index before the index of the current input field
-    focus_input(get_input_index(sender) - 1);
-    // Set the text of the new input field to nothing
-    set_input(get_input_index(sender) - 1, "");
-    // Set the text of the current input field to nothing, just in case there was something there
-    set_input(get_input_index(sender), "");
+    if (get_input_index(sender) != 0) {
+        // Focus the input at the index before the index of the current input field
+        focus_input(get_input_index(sender) - 1);
+        // Set the text of the new input field to nothing
+        set_input(get_input_index(sender) - 1, "");
+        // Set the text of the current input field to nothing, just in case there was something there
+        set_input(get_input_index(sender), "");
+    }
 }
 
 // Function to check if the value entered in an input field at the index passed as a parameter is correct
@@ -247,16 +266,38 @@ function check_input(index) {
 function switch_constant(param, sender) {
     // Set the use variable to the supplied parameter
     use = param;
-    // Call the setup function
-    setup();
+    // Load the ui
+    setup_ui();
+    // Remove all current inputs
+    clear_inputs();
     // Remove the active class from all elements that have it
     $('.active').each(function (i, obj) {
         $(this).removeClass("active");
     });
     // Set the active class on the element that was clicked
     $(sender).addClass("active");
-    // Unhide the button allowing you to start a new session
-    $("#setup-btn").removeClass("hidden");
+}
+
+// Function to update the progress bar
+function update_progress() {
+    // Variable for how many inputs exist in total
+    total = 0;
+    // Variable for how many inputs have something in them
+    containing = 0;
+    // Loop over all inputs
+    $('.number-fields-input').each(function (i, obj) {
+        // If the input is not empty (Contains something)
+        if ($(this).val() != "") {
+            // Increment
+            containing++;
+        }
+        // Increment total
+        total++;
+    });
+    // Calculate how many percent of fields are filled with something
+    percent = (containing / total) * 100;
+    // Adjust the progress bar accordingly
+    $("#progress-bar-digits-recalled").css("width", percent.toString() + "%")
 }
 
 // Function to save input's value on focus
