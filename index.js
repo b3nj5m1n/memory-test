@@ -11,7 +11,10 @@ $(document).ready(function () {
 });
 
 function setup() {
+    // Get value of how many input fields need to be adeed
     num_of_digits = $("#recall-digits-count").val();
+    // Hide button for start
+    $("#setup-btn").addClass("hidden");
     // Remove all the inputs
     $('.number-fields-input').each(function (i, obj) {
         $(this).remove();
@@ -51,7 +54,8 @@ function submit() {
         }
         count += 1;
     });
-    // Check all the inputs
+    // Show button for start
+    $("#setup-btn").removeClass("hidden");
 
 }
 
@@ -69,7 +73,7 @@ function add_input() {
         $("#number-fields").append(input);
     } else {
         // Add an empty input field
-        input = $('<input id="number-fields-input-num-' + count + '" style="background-color: #2F363F;" onkeyup="on_input(this); //add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
+        input = $('<input id="number-fields-input-num-' + count + '" style="background-color: #2F363F;" onkeydown="on_input(this); //add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
         $("#number-fields").append(input);
     }
     return count;
@@ -84,13 +88,21 @@ function add_input() {
 }
 
 function on_input(sender) {
+    var keyCode = event.keyCode || event.which;
+    if (keyCode >= 96 && keyCode <= 105) {
+        // Numpad keys
+        keyCode -= 48;
+    }
+    var number = String.fromCharCode(keyCode);
     $(sender).data('previous', $(sender).data("current"));
-    $(sender).data('current', $(sender).val());
+    $(sender).data('current', number); // String.fromCharCode(event.keyCode)); // $(sender).val());
     if ($(sender).data("current") == "") {
         focus_prev(sender);
     } else {
         focus_next(sender);
     }
+    event.preventDefault();
+    set_input(get_input_index(sender), $(sender).data("current"))
 }
 
 function focus_input(index_to_focus) {
@@ -102,11 +114,11 @@ function focus_input(index_to_focus) {
         index = i;
     });
 }
-function clear_input(index_to_delete) {
+function set_input(index_to_delete, value_to_set) {
     var index = -1
     $('.number-fields-input').each(function (i, obj) {
         if (index == index_to_delete) {
-            $(this).val("");
+            $(this).val(value_to_set);
         }
         index = i;
     });
@@ -124,12 +136,12 @@ function get_input_index(sender) {
 
 function focus_next(sender) {
     focus_input(get_input_index(sender) + 1);
-    clear_input(get_input_index(sender) + 1);
+    set_input(get_input_index(sender) + 1, "");
 }
 // Focus prev input and delete the value in it
 function focus_prev(sender) {
     focus_input(get_input_index(sender) - 1);
-    clear_input(get_input_index(sender) - 1);
+    set_input(get_input_index(sender) - 1, "");
 }
 
 function check_input(index) {
