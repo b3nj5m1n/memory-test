@@ -7,6 +7,12 @@
     user-select: none;
 }
 
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
 .number-fields input {
     width: 1cm;
     text-align: center;
@@ -41,16 +47,15 @@ h2 {
 #number-fields {
     padding-right: 5vh;
     width: 100%;
-
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 }
 
 .input_group {
-    display:flex;
-    flex-wrap:nowrap;
-    justify-content:flex-start;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     padding-right: 5vh;
 }
 
