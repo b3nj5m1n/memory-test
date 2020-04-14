@@ -110,6 +110,12 @@ function add_inputs_groups(input_count, group_size) {
     for (let current_group = 0; current_group < num_of_groups; current_group++) {
         add_input_group(group_size, current_group);
     }
+    // Remove all unneccessary inputs
+    $('.number-fields-input').each(function (i, obj) {
+        if (i > digit_count_total) {
+            $(this).remove();
+        }
+    });
 }
 
 // Add an input group (A div containing multiple input fields, to be able to put spacing between pairs of 3's, 6's, and so on), group_index being the index of the current group
