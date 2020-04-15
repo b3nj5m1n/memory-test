@@ -111,7 +111,9 @@ function add_inputs_groups(input_count, group_size) {
     num_of_groups = input_count / group_size;
     // Add all necessary input groups
     for (let current_group = 0; current_group < num_of_groups; current_group++) {
-        add_input_group(group_size, current_group);
+        setTimeout(() => {
+            add_input_group(group_size, current_group);
+        }, 10 * current_group);
     }
     // Remove all unneccessary inputs
     $('.number-fields-input').each(function (i, obj) {
