@@ -64,8 +64,6 @@ function setup() {
     } else if (use == "e") {
         constant = JSON.parse(e);
     }
-    // Add the first digit (Not a decimal)
-    add_input();
     // Add the input fields in groups
     add_inputs_groups(num_of_digits, group_count_user);
     // Show submit button
@@ -128,6 +126,7 @@ function add_input_group(group_size, group_index) {
     }
     // Append the input group to the number fields div
     $("#number-fields").append(input_group);
+    RefreshSomeEventListener();
 }
 
 // Function to add a new input field, parent being the input group to add to and curr the current index
@@ -140,10 +139,26 @@ function add_input(parent, curr) {
         $("#number-fields").append(input);
     } else {
         // Add an empty input field
-        input = $('<input id="number-fields-input-num-' + curr + '" style="background-color: #2F363F;" onkeydown="on_input(this); //add_input();" class="number-fields-input form-control" type="text" maxlength="1">')
+        input = $('<input id="number-fields-input-num-' + curr + '" style="background-color: #2F363F;" onkeydown="on_input(this);" class="number-fields-input form-control" type="text" maxlength="1">')
+        // Add correct digit at that position as data
+        input.data("correct-digit", get_correct_digit(curr));
         // Append the input field to the parent (An input group)
         $(parent).append(input);
     }
+}
+
+function RefreshSomeEventListener() {
+    $("#number-fields .number-fields-input").off();
+    $("#number-fields .number-fields-input").on("mouseover", function () {
+        // alert($(this).data("correct-digit"));
+        // $(this).val($(this).data("correct-digit"))
+    });
+}
+
+// Function to get the correct number at the given index
+function get_correct_digit(index) {
+    // Return the correct digit
+    return constant[index+1][(index).toString()]
 }
 
 // Function called when a key is pressed inside one of the input fields
@@ -250,7 +265,7 @@ function check_input(index) {
     // Get the input at that index
     input = $(".number-fields-input").eq(index);
     // Get the digit that would be correct at that position
-    correct_digit = constant[index][(index - 1).toString()]
+    correct_digit = input.data("correct-digit"); // constant[index][(index - 1).toString()]
     // Get the digit that was actually typed at that position
     typed_digit = input.val();
     // If the digit is correct
@@ -263,7 +278,7 @@ function check_input(index) {
         // Add one to the variable keeping track of how many digits were correct
         correct_count += 1;
         // Update the text displaying how many digits were recalled correctly
-        $("#correct-recall-indicator").text("You recalled " + correct_count + " / " + digit_count_total + " digits correcty. (" + ((correct_count/digit_count_total)*100).toString() + "%)")
+        $("#correct-recall-indicator").text("You recalled " + correct_count + " / " + digit_count_total + " digits correcty. (" + ((correct_count / digit_count_total) * 100).toString() + "%)")
     } else {
         // console.log("Incorrect! You entered: " + typed_digit + ", the correct digit at that position is: " + correct_digit + "; index: " + (index - 1).toString());
         // Set the input's color to red
