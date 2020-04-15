@@ -33,6 +33,8 @@ function setup_ui() {
     $("#user-config").removeClass("hidden");
     // Hide submit button
     $("#submit-numbers-btn").addClass("hidden");
+    // Hide continue
+    $("#continue-to-recall-btn").addClass("hidden");
     // Remove all the inputs
     clear_inputs();
     // Put the symbol of the constant to use in the text under the navbar
@@ -63,13 +65,39 @@ function setup() {
         constant = JSON.parse(phi);
     } else if (use == "e") {
         constant = JSON.parse(e);
+    } else if (use == "rnd") {
+        constant = "rnd";
+    }
+    else {
+        // Placeholder so that everything doesn't break
+        constant = JSON.parse(pi);
     }
     // Add the input fields in groups
     add_inputs_groups(num_of_digits, group_count_user);
-    // Show submit button
-    $("#submit-numbers-btn").removeClass("hidden");
+    // If numbers are random, there first needs to be some time to memorize them
+    if (use == "rnd") {
+        // Hide submit button
+        $("#submit-numbers-btn").addClass("hidden");
+        // Show the continue button
+        $("#continue-to-recall-btn").removeClass("hidden");
+    } else {
+        // Show submit button
+        $("#submit-numbers-btn").removeClass("hidden");
+    }
     // Set correct count to 0
     correct_count = 0;
+}
+
+// Function to start recall when doing random numbers
+function start_recall() {
+    // Hide the text in all inputs
+    $('.number-fields-input').each(function (i, obj) {
+        $(this).val("");
+    });
+    // Show submit button
+    $("#submit-numbers-btn").removeClass("hidden");
+    // Hide continue button
+    $("#continue-to-recall-btn").addClass("hidden");
 }
 
 // Function called by the submit button
@@ -96,6 +124,8 @@ function submit() {
     $("#user-config").removeClass("hidden");
     // Scroll to the top of the pages
     $("html, body").animate({ scrollTop: 0 }, "slow");
+    // Hide submit button
+    $("#submit-numbers-btn").addClass("hidden");
 }
 
 // Function to automatically create all necessary input groups
@@ -135,10 +165,14 @@ function add_input_group(group_size, group_index) {
 
 // Function to add a new input field, parent being the input group to add to and curr the current index
 function add_input(parent, curr) {
-    // If this input is the first input, it should contain the value before the .
+    // If this input is the first input, it should contain the value before the . & it shouldn't be random numbers
     if (curr == -1) {
         // Add special input field containing that value, read only with custom colors
         input = $('<input value="' + constant[0]["start"] + "." + '" style="background-color: #2F363F; border-color: #EEC213; color: #EEC213;" id="number-fields-input-num-start" oninput="add_input();" class="number-fields-input form-control" readonly="true" type="text" maxlength="2">')
+        // Only make the input field visible if this is not random numbers
+        if (constant == "rnd") {
+            input.css("display", "none")
+        }
         // Add the input to the number-fields div
         $("#number-fields").append(input);
     } else {
@@ -146,6 +180,11 @@ function add_input(parent, curr) {
         input = $('<input id="number-fields-input-num-' + curr + '" style="background-color: #2F363F;" onkeydown="on_input(this);" class="number-fields-input form-control" type="text" maxlength="1">')
         // Add correct digit at that position as data
         input.data("correct-digit", get_correct_digit(curr));
+        // If this is a random number
+        if (constant == "rnd") {
+            // Show the correct digit
+            input.val(input.data("correct-digit"));
+        }
         // Append the input field to the parent (An input group)
         $(parent).append(input);
     }
@@ -161,6 +200,10 @@ function RefreshSomeEventListener() {
 
 // Function to get the correct number at the given index
 function get_correct_digit(index) {
+    // If its random numbers, return a random number
+    if (constant == "rnd") {
+        return randomInt(0, 9).toString();
+    }
     // Return the correct digit
     return constant[index + 1][(index).toString()]
 }
@@ -273,7 +316,7 @@ function check_input(index) {
     // Get the digit that was actually typed at that position
     typed_digit = input.val();
     // If the digit is correct
-    if (correct_digit == typed_digit) {
+    if (correct_digit === typed_digit) {
         // console.log("Correct! You entered: " + typed_digit + ", the correct digit at that position is: " + correct_digit + "; index: " + (index - 1).toString());
         // Set the input's color to green
         input.css("color", "#43BE31");
@@ -332,6 +375,11 @@ function update_progress() {
     percent = (containing / total) * 100;
     // Adjust the progress bar accordingly
     $("#progress-bar-digits-recalled").css("width", percent.toString() + "%")
+}
+
+// Returns a random integer in the given interval
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 // Enable tooltips

@@ -40,6 +40,9 @@
                         <a class="nav-link" onclick='switch_constant("e", this);'>e</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" onclick='switch_constant("rnd", this);'>Random Numbers</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" onclick="">Custom</a>
                     </li>
                 </ul>
@@ -76,6 +79,8 @@
                 <div class="container number-fields" id="number-fields">
                     <!-- This will contain the input fields -->
                 </div>
+                <input id="continue-to-recall-btn" value="Start recall" onclick="start_recall();" style="margin-top: 20px;"
+                    class="hidden form-control btn-warning" type="button">
                 <input id="submit-numbers-btn" value="Submit" onclick="submit();" style="margin-top: 20px;"
                     class="hidden form-control btn-warning" type="button">
             </div>
