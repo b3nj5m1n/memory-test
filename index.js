@@ -91,6 +91,8 @@ function submit() {
     $("#progress-bar-digits-recalled-container").addClass("hidden");
     // Unhide the button allowing you to start a new session
     $("#user-config").removeClass("hidden");
+    // Scroll to the top of the pages
+    $("html, body").animate({ scrollTop: 0 }, "slow");
 }
 
 // Function to automatically create all necessary input groups
@@ -158,7 +160,7 @@ function RefreshSomeEventListener() {
 // Function to get the correct number at the given index
 function get_correct_digit(index) {
     // Return the correct digit
-    return constant[index+1][(index).toString()]
+    return constant[index + 1][(index).toString()]
 }
 
 // Function called when a key is pressed inside one of the input fields
