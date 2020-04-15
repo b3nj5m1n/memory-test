@@ -78,14 +78,17 @@ function submit() {
     count = -1
     // Make all the inputs read only
     $('.number-fields-input').each(function (i, obj) {
-        $(this).prop("readonly", true);
-        // If the current input is not the first one (Conatining the predetermined value, for pi for example it would be 3.)
-        if (count > -1) {
-            // Check if the user input is correct
-            check_input(count + 1);
-        }
-        // Increase the count
-        count += 1;
+        // Add delay
+        setTimeout(() => {
+            $(this).prop("readonly", true);
+            // If the current input is not the first one (Conatining the predetermined value, for pi for example it would be 3.)
+            if (count > -1) {
+                // Check if the user input is correct
+                check_input(count + 1);
+            }
+            // Increase the count
+            count += 1;
+        }, 100 * i);
     });
     // Hide the progress bar
     $("#progress-bar-digits-recalled-container").addClass("hidden");
